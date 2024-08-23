@@ -24,12 +24,15 @@ public class RobotFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        //0 SHOULD WE HANDLE THIS 🤔
         if (!Collections.list(request.getHeaderNames()).contains("x-robot-key")) {
             filterChain.doFilter(request, response);
             return;
         }
         String requestKey = request.getHeader("x-robot-key");
         RobotAuthentication robotAuthentication = RobotAuthentication.authenticationToken(requestKey);
+
+        //1. MAKING DECISION....
         try {
             Authentication authenticated = authenticationManager.authenticate(robotAuthentication);
             SecurityContext context = SecurityContextHolder.createEmptyContext();
@@ -43,5 +46,6 @@ public class RobotFilter extends OncePerRequestFilter {
             response.getWriter().println(e.getMessage());
             return;
         }
+        //2. DO THE REST
     }
 }

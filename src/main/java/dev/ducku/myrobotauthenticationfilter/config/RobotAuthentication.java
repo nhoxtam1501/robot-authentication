@@ -53,7 +53,7 @@ public class RobotAuthentication implements Authentication {
 
     @Override
     public boolean isAuthenticated() {
-        return true;
+        return authenticated;
     }
 
     @Override
